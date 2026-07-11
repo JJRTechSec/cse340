@@ -214,6 +214,13 @@ main.organizations .organization-info span {
 /* ==========================
    Projects Page
 ========================== */
+main.projects {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 main.projects main ul li {
   background: white;
   padding: 1rem 1.2rem;
