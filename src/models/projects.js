@@ -6,7 +6,8 @@ const getAllProjects = async () => {
     SELECT p.title, p.date, o.name
     FROM projects p
     JOIN organizations o
-      ON p.organization_id = o.organization_id;
+      ON p.organization_id = o.organization_id
+    ORDER BY p.date ASC;
   `;
   const result = await db.query(query);
   return result.rows;
