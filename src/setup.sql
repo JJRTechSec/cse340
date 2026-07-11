@@ -161,3 +161,52 @@ VALUES
     'City Sports Complex',
     '2026-10-24'
 );
+
+CREATE TABLE categories (
+    category_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    description TEXT
+);
+
+-- CREATE CATEGORIES TABLE AND LINKING TABLE
+
+CREATE TABLE project_categories (
+    project_id INT NOT NULL,
+    category_id INT NOT NULL,
+    PRIMARY KEY (project_id, category_id),
+    CONSTRAINT fk_project
+        FOREIGN KEY (project_id)
+        REFERENCES projects (project_id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT fk_category
+        FOREIGN KEY (category_id)
+        REFERENCES categories (category_id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+
+-- INSERT CATEGORY DATA
+
+INSERT INTO categories (name, description)
+VALUES
+(
+    'Construction & Infrastructure',
+    'Projects involving construction, renovation, accessibility improvements, and community infrastructure.'
+),
+(
+    'Sustainability & Environment',
+    'Projects promoting environmental stewardship, gardening, food sustainability, and green initiatives.'
+),
+(
+    'Community Outreach',
+    'Volunteer and charity projects that directly support local communities and individuals.'
+),
+(
+    'Education',
+    'Projects focused on teaching skills, raising awareness, or providing educational opportunities.'
+),
+(
+    'Community Events',
+    'Festivals, public events, and community gatherings that encourage engagement.'
+);
