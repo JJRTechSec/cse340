@@ -1,0 +1,16 @@
+<%- include('../partials/header') %>
+  <main>
+    <h1>Something Went Wrong</h1>
+    <p>Sorry, an unexpected error occurred. Our team has been notified and is working to resolve the issue.</p>
+    <p>Return to <a href="/">Home</a></p>
+
+    <% if (NODE_ENV === 'development') { %>
+      <details open>
+        <summary>View Error Details</summary>
+        <pre><%= error %></pre>
+        <pre><%= stack %></pre>
+      </details>
+    <% } %>
+  </main>
+
+  <% include('../partials/footer') %>

@@ -168,7 +168,7 @@ CREATE TABLE categories (
     description TEXT
 );
 
--- CREATE CATEGORIES TABLE AND LINKING TABLE
+-- CREATE CATEGORIES TABLE AND LINKIN
 
 CREATE TABLE project_categories (
     project_id INT NOT NULL,
@@ -210,3 +210,39 @@ VALUES
     'Community Events',
     'Festivals, public events, and community gatherings that encourage engagement.'
 );
+
+INSERT INTO project_categories (project_id, category_id)
+VALUES
+	-- Construction & Infrastructure (1)
+(1, 1),
+(2, 1),
+(3, 1),
+(4, 1),
+(5, 1),
+
+	-- Sustainability & Environment (2)
+(4, 2),
+(6, 2),
+(7, 2),
+(8, 2),
+(9, 2),
+(10, 2),
+(12, 2),
+
+	-- Community Outreach (3)
+(3, 3),
+(5, 3),
+(9, 3),
+(11, 3),
+(12, 3),
+(13, 3),
+(14, 3),
+(15, 3),
+
+	-- Education (4)
+(7, 4),
+(8, 4),
+
+	-- Community Events (5)
+(10, 5),
+(15, 5);
