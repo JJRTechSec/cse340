@@ -10,7 +10,7 @@
           <img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo">
           <div class="organization-info">
             <strong>
-              <%= organization.name %>
+              <a href="/organization/<%= organization.organization_id %>"><%= organization.name %></a>
             </strong>
             <span>
               <%= organization.contact_email %>
