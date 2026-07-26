@@ -22,7 +22,7 @@ const getProjectsByOrganizationId = async (organizationId) => {
       description,
       location,
       date
-    FROM project
+    FROM projects
     WHERE organization_id = $1
     ORDER BY date;
   `;
@@ -33,4 +33,52 @@ const getProjectsByOrganizationId = async (organizationId) => {
   return result.rows;
 };
 
-export { getAllProjects, getProjectsByOrganizationId };
+async function getUpcomingProjects(numberOfProjects) {
+  const query = `
+    SELECT
+      project_id,
+      o.organization_id,
+      title,
+      projects.description,
+      location,
+      date,
+      name
+    FROM projects
+    JOIN organizations o
+      ON projects.organization_id = o.organization_id
+    WHERE date > CURRENT_DATE
+    ORDER BY date
+    LIMIT $1;
+  `;
+
+  const queryParams = [numberOfProjects];
+  const result = await db.query(query, queryParams);
+
+  console.log('Upcoming Projects:', result.rows); // Log the upcoming projects for debugging
+
+  return result.rows;
+};
+
+async function getProjectDetails(projectId) {
+  const query = `
+    SELECT
+      project_id,
+      projects.organization_id,
+      title,
+      projects.description,
+      location,
+      date,
+      name
+    FROM projects
+    JOIN organizations o
+      ON projects.organization_id = o.organization_id
+    WHERE project_id = $1;
+  `;
+
+  const queryParams = [projectId];
+  const result = await db.query(query, queryParams);
+
+  return result.rows[0]; // Return the first row, as project_id is unique
+}
+
+export { getAllProjects, getProjectsByOrganizationId, getUpcomingProjects, getProjectDetails };
