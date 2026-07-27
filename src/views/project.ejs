@@ -3,8 +3,18 @@
     <h1>
       <%= title %>
     </h1>
-
+   
     <h2><%= projectDetails.title %></h2>
+    <p>
+      <strong>Categories:</strong>
+    
+      <% categories.forEach((category, index)=> { %>
+        <a href="/category/<%= category.category_id %>">
+          <%= category.name %>
+        </a>
+        <%= index < categories.length - 1 ? ', ' : '' %>
+      <% }) %></p>
+
     <p>When: <%= projectDetails.formattedDate %></p>
     <p>Where: <%= projectDetails.location %></p>
     <p>Organization: <a href="/organization/<%= projectDetails.organization_id %>"><%= projectDetails.name %></a></p>

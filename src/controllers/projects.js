@@ -1,4 +1,5 @@
 import { getAllProjects, getUpcomingProjects, getProjectDetails } from '../models/projects.js';
+import { getAllCategories, getCategoryById, getCategoriesByProjectId, getProjectsByCategoryId } from '../models/categories.js';
 
 const number_of_upcoming_projects = 5;
 
@@ -17,10 +18,11 @@ const displayProjects = async (req, res) => {
   res.render('projects', { title, projects });
 };
 
- function showProjectDetailsPage() {
+function showProjectDetailsPage() {
   return async (req, res) => {
     const projectId = req.params.id;
     const projectDetails = await getProjectDetails(projectId);
+    const categories = await getCategoriesByProjectId(projectId);
     const title = 'Project Details';
 
     projectDetails.formattedDate = new Date(projectDetails.date).toLocaleDateString('en-GB', {
@@ -28,8 +30,8 @@ const displayProjects = async (req, res) => {
       month: 'long',
       year: 'numeric',
     });
-    
-    res.render('project', { title, projectDetails });
+
+    res.render('project', { title, projectDetails, categories });
   };
 };
 
