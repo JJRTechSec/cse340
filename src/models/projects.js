@@ -54,8 +54,6 @@ async function getUpcomingProjects(numberOfProjects) {
   const queryParams = [numberOfProjects];
   const result = await db.query(query, queryParams);
 
-  console.log('Upcoming Projects:', result.rows); // Log the upcoming projects for debugging
-
   return result.rows;
 };
 
