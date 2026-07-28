@@ -11,7 +11,7 @@ const getAllCategories = async () => {
   return result.rows;
 };
 
-async function getCategoryById(categoryId) {
+const getCategoryById = async (categoryId) => {
   const query = `
     SELECT category_id, name, description
     FROM public.categories
@@ -21,7 +21,7 @@ async function getCategoryById(categoryId) {
   return result.rows[0];
 };
 
-async function getCategoriesByProjectId(projectId) {
+const getCategoriesByProjectId = async (projectId) => {
   const query = `
     SELECT c.category_id, c.name, c.description
     FROM categories c
@@ -32,7 +32,7 @@ async function getCategoriesByProjectId(projectId) {
   return result.rows;
 };
 
-async function getProjectsByCategoryId(categoryId) {
+const getProjectsByCategoryId = async (categoryId) => {
   const query = `
     SELECT p.project_id, title, p.description
     FROM projects p

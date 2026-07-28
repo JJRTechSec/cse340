@@ -16,11 +16,10 @@ router.get('/projects', displayProjects); // Projects page route
 router.get('/categories', displayCategories); // Categories page route
 router.get('/category/:id', showCategoryDetailsPage); // Route for category details page
 router.get('/project/:id', showProjectDetailsPage()); // Route for project details page
-router.get('/organization/:id', showOrganizationDetailsPage);// Route for organization details page
+router.get('/organization/:id', showOrganizationDetailsPage, showProjectDetailsPage());// Route for organization details page
 
 // error handling routes
 router.get('/test-error', testErrorPage); // Route to test 500 error handling
 
-router.get('/organization/:id', showOrganizationDetailsPage);// Route for organization details page
 
 export default router;

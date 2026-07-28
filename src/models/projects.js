@@ -33,7 +33,7 @@ const getProjectsByOrganizationId = async (organizationId) => {
   return result.rows;
 };
 
-async function getUpcomingProjects(numberOfProjects) {
+const getUpcomingProjects = async (numberOfProjects) => {
   const query = `
     SELECT
       project_id,
@@ -57,7 +57,7 @@ async function getUpcomingProjects(numberOfProjects) {
   return result.rows;
 };
 
-async function getProjectDetails(projectId) {
+const getProjectDetails = async (projectId) => {
   const query = `
     SELECT
       project_id,
