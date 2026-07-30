@@ -1,5 +1,42 @@
-import { getAllProjects, getUpcomingProjects, getProjectDetails } from '../models/projects.js';
+import { getAllProjects, getUpcomingProjects, getProjectDetails, createProject } from '../models/projects.js';
 import { getAllCategories, getCategoryById, getCategoriesByProjectId, getProjectsByCategoryId } from '../models/categories.js';
+import { getAllOrganizations } from '../models/organizations.js';
+import { body, validationResult } from 'express-validator';
+
+const projectValidation = [
+  body('title')
+    .trim()
+    .notEmpty()
+    .withMessage('Title is required')
+    .isLength({ min: 3, max: 100 })
+    .withMessage('Title must be between 3 and 100 characters'),
+
+  body('description')
+    .trim()
+    .notEmpty()
+    .withMessage('Description is required')
+    .isLength({ max: 500 })
+    .withMessage('Description must be at most 500 characters'),
+
+  body('location')
+    .trim()
+    .notEmpty()
+    .withMessage('Location is required')
+    .isLength({ max: 100 })
+    .withMessage('Location must be at most 100 characters'),
+
+  body('date')
+    .notEmpty()
+    .withMessage('Date is required')
+    .isISO8601()
+    .withMessage('Date must be a valid date'),
+
+  body('organization_id')
+    .notEmpty()
+    .withMessage('Organization is required')
+    .isInt({ min: 1 })
+    .withMessage('Invalid organization ID')
+];
 
 const number_of_upcoming_projects = 5;
 
@@ -35,4 +72,33 @@ const showProjectDetailsPage = () => {
   };
 };
 
-export { displayProjects, showProjectDetailsPage };
+const showNewProjectForm = async (req, res) => {
+  const organizations = await getAllOrganizations();
+  const title = 'Add New Service Project';
+  res.render('new-project', { title, organizations });
+};
+
+const processNewProjectForm = async (req, res) => {
+  const { title, description, location, date, organization_id } = req.body;
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    errors.array().forEach((error) => {
+      req.flash('error', error.msg);
+    });
+    return res.redirect('/new-project');
+  };
+
+  try {
+    const newProjectId = await createProject(title, description, location, date, organization_id);
+    req.flash('success', 'New project created successfully!');
+    res.redirect(`/project/${newProjectId}`);
+  } catch (error) {
+    console.error('Error creating project:', error);
+    req.flash('error', 'An error occurred while creating the project. Please try again.');
+    res.redirect('/new-project');
+  }
+};
+
+
+export { displayProjects, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, projectValidation };
