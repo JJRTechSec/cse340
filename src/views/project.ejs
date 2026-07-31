@@ -19,6 +19,8 @@
     <p>Where: <%= projectDetails.location %></p>
     <p>Organization: <a href="/organization/<%= projectDetails.organization_id %>"><%= projectDetails.name %></a></p>
     <p><%= projectDetails.description %></p>
+
+    <p><a href='/assign-categories/<%= projectDetails.project_id %>'>Edit categories</a></p>
     
     
   </main>
