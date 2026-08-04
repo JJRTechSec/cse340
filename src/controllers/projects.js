@@ -1,4 +1,4 @@
-import { getAllProjects, getUpcomingProjects, getProjectDetails, createProject } from '../models/projects.js';
+import { getAllProjects, getUpcomingProjects, getProjectDetails, createProject, updateProject } from '../models/projects.js';
 import { getAllCategories, getCategoryById, getCategoriesByProjectId, getProjectsByCategoryId } from '../models/categories.js';
 import { getAllOrganizations } from '../models/organizations.js';
 import { body, validationResult } from 'express-validator';
@@ -100,5 +100,61 @@ const processNewProjectForm = async (req, res) => {
   }
 };
 
+const showEditProjectForm = async (req, res) => {
+  const projectId = req.params.id;
 
-export { displayProjects, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, projectValidation };
+  const projectDetails = await getProjectDetails(projectId);
+  const organizations = await getAllOrganizations();
+
+  const title = 'Edit Project';
+
+  res.render('update-project', {title, projectDetails, organizations});
+};
+
+const processEditProjectForm = async (req, res) => {
+  const projectId = req.params.id;
+
+  const {
+    organization_id,
+    title,
+    description,
+    location,
+    date
+  } = req.body;
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    errors.array().forEach((error) => {
+      req.flash('error', error.msg);
+    });
+
+    return res.redirect(`/edit-project/${projectId}`);
+  }
+
+  try {
+    const updatedProjectId = await updateProject(
+      projectId,
+      organization_id,
+      title,
+      description,
+      location,
+      date
+    );
+
+    req.flash('success', 'Project updated successfully!');
+    return res.redirect(`/project/${updatedProjectId}`);
+  } catch (error) {
+    console.error('Error updating project:', error);
+
+    req.flash(
+      'error',
+      'An error occurred while updating the project. Please try again.'
+    );
+
+    return res.redirect(`/edit-project/${projectId}`);
+  }
+};
+
+
+export { displayProjects, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, projectValidation, showEditProjectForm, processEditProjectForm };

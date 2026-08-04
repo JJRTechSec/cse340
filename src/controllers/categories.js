@@ -28,7 +28,7 @@ const processAssignCategoriesForm = async (req, res) => {
   const projectId = req.params.id;
   const selectedCategoryIds = req.body.categories || [];
 
-  const categroyIdsArray = Array.isArray(selectedCategoryIds) ? selectedCategoryIds : [slectedCategoryIds];
+  const categroyIdsArray = Array.isArray(selectedCategoryIds) ? selectedCategoryIds : [selectedCategoryIds];
   await updateCategoryAssignments(projectId, selectedCategoryIds);
   req.flash('success', 'Categories assigned successfully.');
   res.redirect(`/project/${projectId}`);
