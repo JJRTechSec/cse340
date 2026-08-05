@@ -1,0 +1,88 @@
+import bcrypt from 'bcrypt';
+import { createUser, authenticateUser } from '../models/users.js';
+
+/**
+ * Display the login form.
+ */
+const showLoginForm = (req, res) => {
+  const title = 'Login';
+
+  res.render('login', { title });
+};
+
+/**
+ * Process the login form.
+ */
+const processLoginForm = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await authenticateUser(email, password);
+    if (user) {
+      // Store user info in session
+      req.session.user = user;
+      req.flash('success', 'Login successful!');
+
+      if (res.locals.NODE_ENV === 'development') {
+        console.log('User logged in:', user);
+      }
+
+      res.redirect('/');
+    } else {
+      req.flash('error', 'Invalid email or password.');
+      res.redirect('/login');
+    }
+  } catch (error) {
+    console.error('Error during login:', error);
+    req.flash('error', 'An error occurred during login. Please try again.');
+    res.redirect('/login');
+  }
+};
+
+/**
+ * Process user logout.
+ */
+const processLogout = async (req, res) => {
+  if (req.session.user) {
+    delete req.session.user;
+  }
+
+  req.flash('success', 'Logout successful!');
+  res.redirect('/login');
+};
+
+/**
+ * Display the user registration form.
+ */
+const showUserRegistrationForm = (req, res) => {
+  const title = 'Register';
+
+  res.render('register', { title });
+};
+
+/**
+ * Process the user registration form.
+ */
+const processUserRegistrationForm = async (req, res, next) => {
+  try {
+    const { name, email, password } = req.body;
+
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    await createUser(name, email, passwordHash);
+
+    req.flash('success', 'Account created successfully.');
+    res.redirect('/');
+  } catch (error) {
+    if (error.code === '23505') {
+      req.flash('error', 'An account with that email already exists.');
+      return res.redirect('/register');
+    }
+
+    next(error);
+  }
+};
+
+
+
+export { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout };
