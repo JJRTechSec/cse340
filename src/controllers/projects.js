@@ -55,21 +55,21 @@ const displayProjects = async (req, res) => {
   res.render('projects', { title, projects });
 };
 
-const showProjectDetailsPage = () => {
-  return async (req, res) => {
-    const projectId = req.params.id;
-    const projectDetails = await getProjectDetails(projectId);
-    const categories = await getCategoriesByProjectId(projectId);
-    const title = 'Project Details';
+const showProjectDetailsPage = async (req, res) => {
+  const projectId = req.params.id;
+  const projectDetails = await getProjectDetails(projectId);
+  const categories = await getCategoriesByProjectId(projectId);
+  const title = 'Project Details';
 
-    projectDetails.formattedDate = new Date(projectDetails.date).toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric',
-    });
+  projectDetails.formattedDate = new Date(
+    projectDetails.date
+  ).toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  });
 
-    res.render('project', { title, projectDetails, categories });
-  };
+  res.render('project', { title, projectDetails, categories });
 };
 
 const showNewProjectForm = async (req, res) => {

@@ -4,7 +4,7 @@ import { organizationsPage, showOrganizationDetailsPage, showNewOrganizationForm
 import { displayProjects, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, projectValidation, showEditProjectForm, processEditProjectForm } from './controllers/projects.js';
 import { displayCategories, showCategoryDetailsPage, showAssignCategoriesForm, processAssignCategoriesForm, showNewCategoryForm, processNewCategoryForm, showEditCategoryForm, processEditCategoryForm, categoryValidation } from './controllers/categories.js';
 import { testErrorPage } from './controllers/errors.js';
-import { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout } from './controllers/users.js';
+import { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout, requireLogin, showDashboard } from './controllers/users.js';
 
 const router = express.Router();
 
@@ -26,6 +26,7 @@ router.get('/edit-category/:id', showEditCategoryForm); // Route for edit catego
 router.get('/register', showUserRegistrationForm); // Route for user registration form
 router.get('/login', showLoginForm); // Route for login form
 router.get('/logout', processLogout); // Route for user logout
+router.get('/dashboard', requireLogin, showDashboard); // Route for user dashboard (requires login)
 
 // ROUTER.POST
 router.post('/new-organization', organizationValidation, processNewOrganizationForm); // Route to handle new organization form submission
