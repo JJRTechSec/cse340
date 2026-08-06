@@ -36,13 +36,22 @@ const showAssignCategoriesForm = async (req, res) => {
 
 const processAssignCategoriesForm = async (req, res) => {
   const projectId = req.params.id;
-  const selectedCategoryIds = req.body.categories || [];
+  const selectedCategoryIds = req.body.categories;
 
-  const categoryIdsArray = Array.isArray(selectedCategoryIds) ? selectedCategoryIds : [selectedCategoryIds];
-  await updateCategoryAssignments(projectId, selectedCategoryIds);
+  if (!selectedCategoryIds) {
+    req.flash('error', 'Please select at least one category.');
+    return res.redirect(`/assign-categories/${projectId}`);
+  }
+
+  const categoryIdsArray = Array.isArray(selectedCategoryIds)
+    ? selectedCategoryIds
+    : [selectedCategoryIds];
+
+  await updateCategoryAssignments(projectId, categoryIdsArray);
+
   req.flash('success', 'Categories assigned successfully.');
-  res.redirect(`/project/${projectId}`);
-}
+  return res.redirect(`/project/${projectId}`);
+};
 
 const showNewCategoryForm = (req, res) => {
   const title = 'Create New Category';

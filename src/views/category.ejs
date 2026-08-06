@@ -22,7 +22,13 @@
       <p>No projects found in this category.</p>
     <% } %>
 
-    <p><a href="/edit-category/<%= categoryDetails.category_id %>">Edit Category</a></p>
+    <% if (user && user.role_name==='admin' ) { %>
+      <p>
+        <a href="/edit-category/<%= categoryDetails.category_id %>">
+          Edit Category
+        </a>
+      </p>
+    <%} %>
   </main>
 
   <%- include('partials/footer') %>

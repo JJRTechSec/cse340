@@ -12,7 +12,12 @@
       <% }) %>
     </ul>
 
-    <p><a href="/new-category">Create New Category</a></p>
+
+    <% if (user && user.role_name==='admin' ) { %>
+      <p>
+        <a href="/new-category">Create New Category</a>
+      </p>
+    <% } %>
     
   </main>
 

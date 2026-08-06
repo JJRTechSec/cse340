@@ -7,12 +7,17 @@
 
       <form action="/assign-categories/<%= projectDetails.project_id %>" method="POST">
         <div class="form-group">
-          <label for="categories">Select Categories: *hold ctrl + left click to select multiple options*</label>
-          <select id="categories" name="categories" size="5" multiple required>
-            <% categories.forEach((category)=> { %>
-              <option value="<%= category.category_id %>"><%= category.name %></option>
-              <% })%>
-          </select>
+          <div class="categories">
+            <% categories.forEach(category=> { %>
+              <div class="category-option">
+                <input type="checkbox" id="category-<%= category.category_id %>" name="categories"
+                  value="<%= category.category_id %>">
+                <label for="category-<%= category.category_id %>">
+                  <%= category.name %>
+                </label>
+              </div>
+            <% }) %>
+          </div>
         </div>
         <button type="submit">Assign Categories</button>
       </form>
