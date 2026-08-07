@@ -1,7 +1,7 @@
 import express from 'express';
 import { displayHome } from './controllers/index.js';
 import { organizationsPage, showOrganizationDetailsPage, showNewOrganizationForm, processNewOrganizationForm, organizationValidation, showEditOrganizationForm, processEditOrganizationForm} from './controllers/organizations.js';
-import { displayProjects, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, projectValidation, showEditProjectForm, processEditProjectForm } from './controllers/projects.js';
+import { displayProjects, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, projectValidation, showEditProjectForm, processEditProjectForm, processAddVolunteer, processRemoveVolunteer } from './controllers/projects.js';
 import { displayCategories, showCategoryDetailsPage, showAssignCategoriesForm, processAssignCategoriesForm, showNewCategoryForm, processNewCategoryForm, showEditCategoryForm, processEditCategoryForm, categoryValidation } from './controllers/categories.js';
 import { testErrorPage } from './controllers/errors.js';
 import { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout, requireLogin, requireRole, showDashboard, showUsersPage } from './controllers/users.js';
@@ -44,6 +44,8 @@ router.post('/assign-categories/:id', requireRole('admin'), processAssignCategor
 router.post('/edit-project/:id', requireRole('admin'), projectValidation, processEditProjectForm); // Route to handle edit project form submission
 router.post('/new-category', requireRole('admin'), categoryValidation, processNewCategoryForm); // Route to handle new category form submission
 router.post('/edit-category/:id', requireRole('admin'), categoryValidation, processEditCategoryForm); // Route to handle edit category form submission
+router.post('/project/:id/volunteer', requireLogin, processAddVolunteer); // Route to handle adding a volunteer to a project
+router.post('/project/:id/remove-volunteer', requireLogin, processRemoveVolunteer); // Route to handle removing a volunteer from a project
 
 // error handling routes
 router.get('/test-error', testErrorPage); // Route to test 500 error handling

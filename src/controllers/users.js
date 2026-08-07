@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import { createUser, authenticateUser, getAllUsers } from '../models/users.js';
+import { getVolunteerProjectsByUserId } from '../models/volunteers.js';
 
 /**
  * Display the login form.
@@ -117,10 +118,23 @@ const requireRole = (role) => {
   };
 };
 
-const showDashboard = (req, res) => {
+const showDashboard = async (req, res) => {
   const user = req.session.user;
-  res.render('dashboard', { title: 'Dashboard', name: user.name, email: user.email });
-}
+
+  const volunteerProjects = await getVolunteerProjectsByUserId(
+    user.user_id
+  );
+
+  volunteerProjects.forEach(project => {
+    project.formattedDate = new Date(project.date).toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    });
+  });
+
+  res.render('dashboard', { title: 'Dashboard', name: user.name, email: user.email, volunteerProjects });
+};
 
 const showUsersPage = async (req, res, next) => {
   try {

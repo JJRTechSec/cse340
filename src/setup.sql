@@ -246,3 +246,114 @@ VALUES
 	-- Community Events (5)
 (10, 5),
 (15, 5);
+
+
+
+/* ==========================================================
+   Create Roles Table
+   ========================================================== */
+
+CREATE TABLE roles (
+    role_id SERIAL PRIMARY KEY,
+    role_name VARCHAR(50) NOT NULL UNIQUE,
+    role_description TEXT
+);
+
+
+/* ==========================================================
+   Insert Default Roles
+   ========================================================== */
+
+INSERT INTO roles (role_name, role_description)
+VALUES
+    ('user', 'Standard user with basic access'),
+    ('admin', 'Administrator with full system access');
+
+
+/* ==========================================================
+   Verify Roles Were Added
+   ========================================================== */
+
+SELECT *
+FROM roles;
+
+
+/* ==========================================================
+   Create Users Table
+   ========================================================== */
+
+CREATE TABLE users (
+    user_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    role_id INTEGER REFERENCES roles(role_id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+/* ==========================================================
+   Insert Test User
+   ========================================================== */
+
+INSERT INTO users (
+    name,
+    email,
+    password_hash,
+    role_id
+)
+VALUES (
+    'Test User',
+    'test@example.com',
+    'placeholder_hash',
+    1
+);
+
+
+/* ==========================================================
+   Join Users and Roles
+   ========================================================== */
+
+SELECT
+    users.user_id,
+    users.name,
+    users.email,
+    roles.role_name,
+    users.created_at
+FROM users
+JOIN roles
+    ON users.role_id = roles.role_id;
+
+
+/* ==========================================================
+   Delete Test User
+   ========================================================== */
+
+DELETE FROM users
+WHERE email = 'test@example.com';
+
+SELECT * FROM USERS;
+
+UPDATE users SET role_id = (SELECT role_id FROM roles WHERE role_name = 'admin') WHERE email = 'admin@example.com';
+
+/* ==========================================================
+   Create Project Volunteers Linking Table
+   ========================================================== */
+
+CREATE TABLE project_volunteers (
+    user_id INTEGER NOT NULL,
+    project_id INTEGER NOT NULL,
+
+    PRIMARY KEY (user_id, project_id),
+
+    FOREIGN KEY (user_id)
+        REFERENCES users(user_id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (project_id)
+        REFERENCES projects(project_id)
+        ON DELETE CASCADE
+);
+
+
+
+
